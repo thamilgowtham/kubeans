@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Pod
+metadata:
+   namespace: dev
+   name: anspod
+spec:
+   containers:
+   - name: anscon
+     image: westuser/podimg:latest
+     ports:
+     - containerPort: 80
