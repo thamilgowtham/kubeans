@@ -5,7 +5,7 @@ metadata:
    name: anspod
 spec:
    containers:
-   - name: anscon
+   - name: anscon1
      image: westuser/podimg:latest
      ports:
      - containerPort: 80
