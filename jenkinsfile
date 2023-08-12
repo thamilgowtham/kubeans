@@ -1,0 +1,39 @@
+pipeline {
+    agent {label 'ansdoc'}
+    stages {
+        stage('GIT CLONE'){
+            steps {
+                git 'https://github.com/thamilgowtham/kubeans.git'
+            }
+        }
+        stage('Build Docker Image'){
+            steps {
+                sh 'docker build -t westuser/podimg .'
+            }
+        }
+        stage('Docker hub login'){
+            steps {
+               withCredentials([string(credentialsId: 'dockhub_id', variable: 'DOCKER_HUB_CREDENTIALS')]) {
+                sh 'docker login -u westuser -p ${DOCKER_HUB_CREDENTIALS}' 
+                    }
+            }
+        }
+        stage('Push Docker image'){
+            steps {
+                sh 'docker push westuser/podimg'
+            }
+        }
+        stage('Create Pod'){
+            steps {
+               sh 'kubectl create -f anspod.yml' 
+            }
+        }
+        stage('Remove docker image'){
+            steps {
+                sh 'docker image rmi westuser/podimg'
+            }
+        }
+
+    }
+}
+
